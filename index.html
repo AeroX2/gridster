@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<script src="jquery.gridster.js"></script>
+
+         <link rel="stylesheet" type="text/css" href="jquery.gridster.css">
+         <link rel="stylesheet" type="text/css" href="demo.css">
+	</head>
+  
+	<body>
+        <input id="new-box" type="button" value="Add box"/> 
+		<div class="gridster">
+			<ul>
+			</ul>
+		</div>
+	</body>
+	
+	<script>
+		$(function()
+		{
+			console.log("Running gridster");
+            var container_size_x = 4
+            var container_size_y = 4
+			var gridster = $(".gridster ul").gridster(
+			{
+				widget_margins: [5,5],
+				widget_base_dimensions: [140, 140],
+                min_cols: container_size_x,
+                min_rows: container_size_y,
+                max_cols: container_size_x,
+                max_rows: container_size_y,
+                shift_larger_widgets_down: false,
+                resize: 
+                {
+                    enabled: true
+                }
+			}).data("gridster");
+
+            var size = 0
+            $("#new-box").click(function()
+            {
+                if (size < container_size_x * container_size_y) 
+                {
+                    gridster.add_widget("<li></li>");
+                    size += 1
+                }
+            });
+
+            gridster.options.resize.start = function(event, ui, widget_m)
+            {
+                var grid = widget_m.coords().grid
+                size -= grid.size_x * grid.size_y
+            }
+	
+            gridster.options.resize.stop = function(event, ui, widget_m)
+            {
+                var grid = widget_m.coords().grid
+                size += grid.size_x * grid.size_y
+            }
+		});
+	</script>
+</html>
